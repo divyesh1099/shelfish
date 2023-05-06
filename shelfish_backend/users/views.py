@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer
 from .models import User
+from django.contrib.auth.models import Group
 import jwt, datetime
 
 # Create your views here.
@@ -21,13 +22,19 @@ class Login(APIView):
         password = request.data['password']
 
         user = User.objects.filter(username = username).first()
+        
         if user is None:
             raise AuthenticationFailed('User Not Found')
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password')
+       
+        db_group = Group.objects.filter(name = user.group)[0]
+        user.groups.add(db_group)
+        print(user.groups)
         
         payload = {
             'id': user.id,
+            'group': user.groups.name,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60), 
             'iat': datetime.datetime.utcnow()
         }
