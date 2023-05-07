@@ -2,14 +2,18 @@ const getBooks = async () => {
         const response = await fetch('http://localhost:8000/booksapi/books');
         const myJson = await response.json();
         const books = myJson.results;
-        console.log(books);
         const booksDiv = document.getElementById('books');
         const viewBooksButton = document.getElementById('viewBooks');
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        console.log(userData);
         viewBooksButton.classList.add('hide')
         for(let i=0; i < books.length; i++){
             var to_do = "Borrow"
             if(books[i].availability == 'borrowed'){
                 to_do = "Return"
+            }
+            if(books[i].borrowedByUser != null && books[i].borrowedByUser != userData.id ){
+                to_do = "Borrowed by Another User"
             }
             booksDiv.innerHTML += `
             <div class="row m-1 p-1">
@@ -18,42 +22,55 @@ const getBooks = async () => {
                     <div class="card-body">
                         <h5 class="card-title">${books[i].title}</h5>
                         <p class="card-text">${books[i].availability}</p>
-                        <a href="#" onclick='borrow_return(${books[i].id}, "${books[i].title}", "${books[i].availability}")' class="btn btn-primary">
+                        <a href="#" id="borrowReturnBookButton-${books[i].id}" onclick='borrow_return(${books[i].id}, "${books[i].title}", "${books[i].availability}", ${books[i].borrowedByUser})' class="btn btn-primary" disabled="none">
                         ${to_do}
                         </a>
-                        <a class="btn btn-warning" href="#" onclick="edit(${books[i].id})">Edit Book</a>
-                        <a class="btn btn-danger" href="#" onclick="deleteBook(${books[i].id})">Delete Book</a>
+                        <a class="btn btn-warning" id="editBookButton-${books[i].id}" href="#" onclick="edit(${books[i].id})">Edit Book</a>
+                        <a class="btn btn-danger" id="deleteBookButton-${books[i].id}" href="#" onclick="deleteBook(${books[i].id})">Delete Book</a>
                         
                     </div>
                     </div>
                 </div>
             <div>
             `
+            if(userData.group == 'member'){
+                document.getElementById('editBookButton-'+books[i].id).classList.add('hide');
+                document.getElementById('deleteBookButton-'+books[i].id).classList.add('hide');
+            }
+            
         }
     }
 
-const borrow_return = async (id, title, availability) => {
+const borrow_return = async (id, title, availability, borrowedByUser) => {
     if(isLoggedIn()){
+        var userData = JSON.parse(localStorage.getItem('userData'))
+        if(borrowedByUser != null && borrowedByUser != userData.id){
+            alert("You Will Have to wait for Other User To Return the book")
+            return
+        }
         if(availability == 'available'){
             fetch("http://localhost:8000/booksapi/books/" + id + "/", {
                 method: "PUT",
                 
                 body: JSON.stringify({
                     title: title,
-                    availability: "borrowed"
+                    availability: "borrowed",
+                    borrowedByUser: userData.id
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             });
             alert('Book Borrowed');
+            localStorage.getItem()
         } else {
             fetch("http://localhost:8000/booksapi/books/" + id + "/", {
                 method: "PUT",
                 
                 body: JSON.stringify({
                     title: title,
-                    availability: "available"
+                    availability: "available", 
+                    borrowedByUser: null
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
@@ -85,6 +102,7 @@ const edit = async(id) =>{
             </div>                        
         </div>
         `
+        localStorage.setItem('bookBorrowedByUser', book.borrowedByUser)
     } else {
         window.location.href = './login.html';
     }
@@ -98,12 +116,14 @@ const saveEditedBook = async(id)=>{
             
             body: JSON.stringify({
                 title: editedBookTitle.value,
-                availability: "available"
+                availability: "available", 
+                borrowedByUser: localStorage.getItem('bookBorrowedByUser')
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
     });
+    localStorage.removeItem('bookBorrowedByUser');
 }
 
 const createBook = async(title) =>{
@@ -170,8 +190,28 @@ const isLoggedIn = () => {
 }
 
 function getUserIfLoggedIn(jwt){
-
+    var decodedData = decodeJwt(jwt);
+    console.log(decodedData);
+    var userData = {
+        id: decodedData.id,
+        group: decodedData.group,
+        email: decodedData.email
+    }
+    localStorage.setItem('userData', JSON.stringify(userData));
 }
+
+function decodeJwt(token) {
+    var base64Payload = token.split(".")[1];
+    var payload = decodeURIComponent(
+      atob(base64Payload)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(payload);
+  }
 
 document.addEventListener('DOMContentLoaded', function() {
     isLoggedIn();

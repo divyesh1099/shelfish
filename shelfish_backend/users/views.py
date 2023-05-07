@@ -34,7 +34,8 @@ class Login(APIView):
         
         payload = {
             'id': user.id,
-            'group': user.groups.name,
+            'email': user.email,
+            'group': user.group,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60), 
             'iat': datetime.datetime.utcnow()
         }

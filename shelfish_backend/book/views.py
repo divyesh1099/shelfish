@@ -49,29 +49,25 @@ class BookAPIView(APIView):
         return response
 
     def put(self, request, pk=None, format=None):
-        # Get the todo to update
         book_to_update = Book.objects.get(pk=pk)
-
-        # Pass the instance to update to the serializer, and the data and also partial to the serializer
-        # Passing partial will allow us to update without passing the entire Todo object
         serializer = BookSerializer(instance=book_to_update,data=request.data, partial=True)
-
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if request.user.is_authenticated :
+            book_to_update.borrowedByUser = request.user.id
+            serializer.save()
         response = Response()
-
         response.data = {
-            'message': 'Todo Updated Successfully',
+            'message': 'Book Updated Successfully',
             'data': serializer.data
         }
-
         return response
     
     def delete(self, request, pk, format=None):
         book_to_delete =  Book.objects.get(pk=pk)
 
         # delete the todo
-        book_to_delete.delete()
+        if request.user.is_authenticated and ( request.user.is_superuser or request.user.group == 'librarian'):
+            book_to_delete.delete()
 
         return Response({
             'message': 'Book Deleted Successfully'
