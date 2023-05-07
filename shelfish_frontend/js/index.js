@@ -13,7 +13,7 @@ const getBooks = async () => {
                 to_do = "Return"
             }
             if(books[i].borrowedByUser != null && books[i].borrowedByUser != userData.id ){
-                to_do = "Borrowed by Another User"
+                to_do = "Borrowed by Some User"
             }
             booksDiv.innerHTML += `
             <div class="row m-1 p-1">
@@ -103,6 +103,7 @@ const edit = async(id) =>{
         </div>
         `
         localStorage.setItem('bookBorrowedByUser', book.borrowedByUser)
+        
     } else {
         window.location.href = './login.html';
     }
@@ -198,6 +199,16 @@ function getUserIfLoggedIn(jwt){
         email: decodedData.email
     }
     localStorage.setItem('userData', JSON.stringify(userData));
+    const main = document.getElementById('main')
+    if(userData.group == 'librarian'){
+        main.innerHTML += `
+        <a class="btn btn-warning" onclick="getAllMemberUsers()">Manage Members</a>
+        `
+    }
+    main.innerHTML += `
+    <button onclick="deleteMyOwnAccount()" class="btn btn-danger">Delete My Account</button>
+    `
+
 }
 
 function decodeJwt(token) {
@@ -214,12 +225,15 @@ function decodeJwt(token) {
   }
 
 document.addEventListener('DOMContentLoaded', function() {
-    isLoggedIn();
-    var main = document.getElementById('main');
-    main.innerHTML += `
-    <button class="btn btn-success" onclick="createNewBookForm()">Create New Book</button>
-    <div id="createNewBook"></div>
-    `
+    const loginInfo = isLoggedIn();
+    if(loginInfo){
+        var main = document.getElementById('main');
+        main.innerHTML += `
+        <button class="btn btn-success" onclick="createNewBookForm()">Create New Book</button>
+        <div id="createNewBook"></div>
+        `
+    }
+
 }, false);
 
 const logout = async() =>{
@@ -250,4 +264,51 @@ function createNewBookForm(){
         </div>
     </div>
     `
+}
+
+const deleteMyOwnAccount = async() =>{
+    var response = await fetch("http://localhost:8000/users/deleteMyOwnAccount", {
+        method: "DELETE"
+    })
+    var myJSON = await response.json()
+    console.log(myJSON)
+    logout()
+}
+
+const getAllMemberUsers = async() => {
+    var myResponse = await fetch("http://localhost:8000/users/getAllMemberUsers")
+    var myJSON = await myResponse.json()
+    const mainElement = document.getElementById('main')
+    main.innerHTML += `
+    <div class="m-1 p-1">
+        <table id="membersTable">
+            <tr>
+                <th>Member Name</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+    `
+    const tableElement = document.getElementById('membersTable');
+    for(var i = 0; myJSON.length; i++){
+        tableElement.innerHTML += `
+        <tr>
+            <td>${myJSON[i].username}</td>
+            <td>
+                <button onclick="deleteMemberAccount(${myJSON[i].id})" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+        `
+    }
+}
+
+const deleteMemberAccount = async (id) => {
+    const myResponse = await fetch("http://localhost:8000/users/deleteMemberAccount/" + id, {
+        method: "DELETE",
+        headers: {
+            Authentication: sessionStorage.getItem('jwt')
+        }
+    })
+    const myJSON = await myResponse.json()
+    console.log(myJSON)
 }

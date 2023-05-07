@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from .models import User
 from django.contrib.auth.models import Group
@@ -71,3 +72,23 @@ class Logout(APIView):
             "message": "Logged Out Successfully"
         }
         return response
+    
+class GetAllMemberUsersView(APIView):
+    def get(self, request):
+        users = User.objects.filter(group = 'member')
+        serializers = UserSerializer(users, many=True)
+        return Response(serializers.data)
+
+
+class DeleteAccount(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, *args, **kwargs):
+        user=self.request.user
+        user.delete()
+
+        return Response({"result":"User Deleted Successfully"})
+    
+    def delete_obj(self, request, id):
+        user = User.objects.get(id = id)
+        user.delete()
+        return Response({"result": "User Deleted Successfully"})
