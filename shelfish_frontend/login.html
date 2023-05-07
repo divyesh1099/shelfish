@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShelfIsh</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <!-- As a link -->
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="./index.html" id="home">Shelfish</a>
+            <a href="./login.html">Login</a>
+            <a href="./register.html" onclick="">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="m-3 p-3">
+        <div class="container">
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="username" required class="form-control" />
+              <label class="form-label" for="username">Username</label>
+            </div>
+          
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" id="password" required class="form-control" />
+              <label class="form-label" for="password">Password</label>
+            </div>
+          
+            <!-- Submit button -->
+            <button type="button" class="btn btn-primary btn-block mb-4"id="loginButton" onclick="login()">Sign in</button>
+          
+            <!-- Register buttons -->
+            <div class="text-center">
+              <p>Not yet Registered? <a href="./register.html">Register</a></p>
+              
+            </div>
+          </div>
+    </main>
+
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/jquery-3.2.1.slim.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/login.js"></script>
+</body>
+</html>

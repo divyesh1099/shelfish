@@ -7,6 +7,6 @@ class User(AbstractUser):
         ('member', 'member'),
     )
     username = models.CharField(max_length = 255, unique=True)
-    email = models.CharField(max_length=255, unique=True)
+    email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     group = models.CharField(max_length=10, choices=GROUPS, default='member')
