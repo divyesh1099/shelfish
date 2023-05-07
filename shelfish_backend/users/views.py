@@ -81,14 +81,13 @@ class GetAllMemberUsersView(APIView):
 
 
 class DeleteAccount(APIView):
-    permission_classes = [IsAuthenticated]
     def delete(self, request, *args, **kwargs):
         user=self.request.user
         user.delete()
-
         return Response({"result":"User Deleted Successfully"})
     
-    def delete_obj(self, request, id):
+class DeleteMemberAccount(APIView):
+    def delete(self, request, id):
         user = User.objects.get(id = id)
         user.delete()
         return Response({"result": "User Deleted Successfully"})

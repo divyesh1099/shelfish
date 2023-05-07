@@ -8,5 +8,5 @@ urlpatterns = [
     path("logout", views.Logout.as_view()),
     path("getAllMemberUsers", views.GetAllMemberUsersView.as_view()),
     path("deleteMyOwnAccount", views.DeleteAccount.as_view()),
-    path("deleteMemberAccount/<str:id>", views.DeleteAccount.as_view()),
+    path("deleteMemberAccount/<str:id>", views.DeleteMemberAccount.as_view()),
 ]

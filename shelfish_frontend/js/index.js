@@ -304,11 +304,9 @@ const getAllMemberUsers = async() => {
 
 const deleteMemberAccount = async (id) => {
     const myResponse = await fetch("http://localhost:8000/users/deleteMemberAccount/" + id, {
-        method: "DELETE",
-        headers: {
-            Authentication: sessionStorage.getItem('jwt')
-        }
+        method: "DELETE"
     })
     const myJSON = await myResponse.json()
     console.log(myJSON)
+    alert("Member Deleted Successfully")
 }
