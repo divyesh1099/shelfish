@@ -1,5 +1,5 @@
 const getBooks = async () => {
-        const response = await fetch('http://localhost:8000/booksapi/books');
+        const response = await fetch('https://motidivya.pythonanywhere.com/booksapi/books');
         const myJson = await response.json();
         const books = myJson.results;
         const booksDiv = document.getElementById('books');
@@ -49,7 +49,7 @@ const borrow_return = async (id, title, availability, borrowedByUser) => {
             return
         }
         if(availability == 'available'){
-            fetch("http://localhost:8000/booksapi/books/" + id + "/", {
+            fetch("https://motidivya.pythonanywhere.com/booksapi/books/" + id + "/", {
                 method: "PUT",
                 
                 body: JSON.stringify({
@@ -64,7 +64,7 @@ const borrow_return = async (id, title, availability, borrowedByUser) => {
             alert('Book Borrowed');
             localStorage.getItem()
         } else {
-            fetch("http://localhost:8000/booksapi/books/" + id + "/", {
+            fetch("https://motidivya.pythonanywhere.com/booksapi/books/" + id + "/", {
                 method: "PUT",
                 
                 body: JSON.stringify({
@@ -87,7 +87,7 @@ const borrow_return = async (id, title, availability, borrowedByUser) => {
 const edit = async(id) =>{
     if(isLoggedIn()){
         const bookCard = document.getElementById('bookCard-'+ id);
-        const response = await fetch('http://localhost:8000/booksapi/books/' + id + '/');
+        const response = await fetch('https://motidivya.pythonanywhere.com/booksapi/books/' + id + '/');
         const book = await response.json();
         bookCard.innerHTML += `
         <div class="editBookForm">
@@ -112,7 +112,7 @@ const edit = async(id) =>{
 const saveEditedBook = async(id)=>{
     var editedBookTitle = document.getElementById('editedBookTitle');
 
-    fetch("http://localhost:8000/booksapi/books/" + id + "/", {
+    fetch("https://motidivya.pythonanywhere.com/booksapi/books/" + id + "/", {
             method: "PUT",
             
             body: JSON.stringify({
@@ -132,7 +132,7 @@ const createBook = async(title) =>{
 
         var bookTitleInput = document.getElementById('bookTitle');
         
-        fetch("http://localhost:8000/booksapi/books/", {
+        fetch("https://motidivya.pythonanywhere.com/booksapi/books/", {
                 method: "POST",
                 
                 body: JSON.stringify({
@@ -151,7 +151,7 @@ const createBook = async(title) =>{
 
 const deleteBook = async(id) => {
     if(isLoggedIn()){
-        fetch("http://localhost:8000/booksapi/books/" + id + "/", {
+        fetch("https://motidivya.pythonanywhere.com/booksapi/books/" + id + "/", {
                 method: "DELETE",
             });
         alert("Book Deleted Successfully.")
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }, false);
 
 const logout = async() =>{
-    fetch("http://localhost:8000/users/logout", {
+    fetch("https://motidivya.pythonanywhere.com/users/logout", {
             method: "POST",
         });
     sessionStorage.removeItem('jwt');
@@ -267,7 +267,7 @@ function createNewBookForm(){
 }
 
 const deleteMyOwnAccount = async() =>{
-    var response = await fetch("http://localhost:8000/users/deleteMyOwnAccount", {
+    var response = await fetch("https://motidivya.pythonanywhere.com/users/deleteMyOwnAccount", {
         method: "DELETE"
     })
     var myJSON = await response.json()
@@ -276,7 +276,7 @@ const deleteMyOwnAccount = async() =>{
 }
 
 const getAllMemberUsers = async() => {
-    var myResponse = await fetch("http://localhost:8000/users/getAllMemberUsers")
+    var myResponse = await fetch("https://motidivya.pythonanywhere.com/users/getAllMemberUsers")
     var myJSON = await myResponse.json()
     const mainElement = document.getElementById('main')
     main.innerHTML += `
@@ -303,7 +303,7 @@ const getAllMemberUsers = async() => {
 }
 
 const deleteMemberAccount = async (id) => {
-    const myResponse = await fetch("http://localhost:8000/users/deleteMemberAccount/" + id, {
+    const myResponse = await fetch("https://motidivya.pythonanywhere.com/users/deleteMemberAccount/" + id, {
         method: "DELETE"
     })
     const myJSON = await myResponse.json()

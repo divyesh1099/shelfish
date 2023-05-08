@@ -1,7 +1,7 @@
 const login = async() => {
     var userUsername = document.getElementById('username').value;
     var userPassword = document.getElementById('password').value;
-    var myResponse = await fetch("http://localhost:8000/users/login", {
+    var myResponse = await fetch("https://motidivya.pythonanywhere.com/users/login", {
             method: "POST",
             
             body: JSON.stringify({

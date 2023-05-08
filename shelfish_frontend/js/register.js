@@ -4,7 +4,7 @@ const register = async() => {
     var passwordElement = document.getElementById('password')
     var group = document.querySelector('input[name="group"]:checked').value
     console.log(usernameElement.value, emailElement.value, passwordElement.value, group)
-    var myResponse = await fetch("http://localhost:8000/users/register", {
+    var myResponse = await fetch("https://motidivya.pythonanywhere.com/users/register", {
         method: "POST", 
         body: JSON.stringify({
             username: usernameElement.value,
