@@ -1,11 +1,11 @@
 # Documentation
 
 ### Index
-- Detailed structure of tables.
-- Database Diagram representing relationships between tables.
-- Documentation of each API with requirements, outputs and various errors.
-- Documentation of Frontend and Flow of the Software
-- Documentation of Hosting Instructions
+- [Detailed structure of tables.](Detailed%20Table%20Structure.md)
+- [Database Diagram representing relationships between tables.](Database%20Diagram.png)
+- [Documentation of each API with requirements, outputs and various errors.](API%20Documentation.xls)
+- [Documentation of Frontend and Flow of the Software](README.md)
+- [Documentation of Hosting Instructions](HostingInstructions.md)
 
 ## Frontend Flow Explanation
 1. Users Can Visit the Home Page and View Books that are available. 
@@ -39,10 +39,10 @@
 - Bootstrap Integration and Implementation
 
 ## References
-- Django Documentation.
-- Django REST Framework Documentation.
-- PythonAnywhere Documenation.
-- Vercel Web Hosting Documentation.
+- [Django Documentation.](https://www.django-rest-framework.org/topics/documenting-your-api/)
+- [Django REST Framework Documentation.](https://www.django-rest-framework.org/#installation)
+- [PythonAnywhere Documenation.](https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/)
+- [Vercel Web Hosting Documentation.](https://vercel.com/docs/concepts/deployments/overview)
 
 ## Scope
 - Can Handle Thousand of Users
