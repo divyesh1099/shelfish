@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-&%=t7ddb4&*wu3408!$941@scv=9t(@jiuw$p+i5nkyptr=&a!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".vercel.app", ".now.sh"]
+ALLOWED_HOSTS = [".vercel.app", ".now.sh", "127.0.0.1"]
 
 
 # Application definition
@@ -151,4 +151,4 @@ GRAPH_MODELS = {
     "group_models": True,
 }
 
-os.environ["PATH"] += os.pathsep + 'D:/GraphViz/bin/'
+os.environ["PATH"] += os.pathsep + "D:/GraphViz/bin/"
